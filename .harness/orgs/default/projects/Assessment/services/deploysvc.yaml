@@ -1,0 +1,9 @@
+service:
+  name: deploysvc
+  identifier: deploysvc
+  serviceDefinition:
+    type: Kubernetes
+    spec: {}
+  gitOpsEnabled: true
+  orgIdentifier: default
+  projectIdentifier: Assessment

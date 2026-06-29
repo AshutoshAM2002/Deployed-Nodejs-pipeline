@@ -4,15 +4,10 @@ pipeline:
   projectIdentifier: Assessment
   orgIdentifier: default
   tags: {}
-  properties:
-    ci:
-      codebase:
-        connectorRef: Ashutosh
-        build: <+input>
   stages:
     - stage:
-        name: CI stage
-        identifier: CI_stage
+        name: build
+        identifier: build
         description: ""
         type: CI
         spec:
@@ -26,8 +21,10 @@ pipeline:
             os: Linux
             arch: Amd64
           runtime:
-            type: Docker
-            spec: {}
+            type: Cloud
+            spec:
+              imageSpec:
+                imageName: ubuntu-latest
           execution:
             steps:
               - step:
@@ -39,5 +36,9 @@ pipeline:
                     repo: ashutosham2002/nodejsapp
                     tags:
                       - latest
-                    caching: true
                     dockerfile: ./Dockerfile
+  properties:
+    ci:
+      codebase:
+        connectorRef: Ashutosh
+        build: <+input>

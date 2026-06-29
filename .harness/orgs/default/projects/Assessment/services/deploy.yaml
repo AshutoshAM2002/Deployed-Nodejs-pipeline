@@ -1,0 +1,20 @@
+service:
+  name: deploy
+  identifier: deploy
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: docker_hub
+                imagePath: ashutosham2002/nodejsapp
+                tag: <+input>.selectOneFrom(latest)
+                digest: ""
+              identifier: dockerhub
+              type: DockerRegistry
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: Assessment

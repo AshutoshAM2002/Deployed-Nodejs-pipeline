@@ -15,6 +15,6 @@ service:
                 digest: ""
               identifier: dockerhub
               type: DockerRegistry
-  gitOpsEnabled: true
+  gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: Assessment

@@ -15,6 +15,21 @@ service:
                 digest: ""
               identifier: dockerhub
               type: DockerRegistry
+      manifests:
+        - manifest:
+            identifier: k8s
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: Ashutosh
+                  gitFetchType: Branch
+                  paths:
+                    - k8s
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
   gitOpsEnabled: false
   orgIdentifier: default
   projectIdentifier: Assessment

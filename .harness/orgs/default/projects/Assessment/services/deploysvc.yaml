@@ -3,7 +3,18 @@ service:
   identifier: deploysvc
   serviceDefinition:
     type: Kubernetes
-    spec: {}
+    spec:
+      artifacts:
+        primary:
+          primaryArtifactRef: <+input>
+          sources:
+            - spec:
+                connectorRef: docker_hub
+                imagePath: ashutosham2002/nodejsapp
+                tag: <+input>.selectOneFrom(latest)
+                digest: ""
+              identifier: dockerhub
+              type: DockerRegistry
   gitOpsEnabled: true
   orgIdentifier: default
   projectIdentifier: Assessment

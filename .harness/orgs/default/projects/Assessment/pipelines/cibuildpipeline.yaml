@@ -1,0 +1,43 @@
+pipeline:
+  name: ci-build-pipeline
+  identifier: cibuildpipeline
+  projectIdentifier: Assessment
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Ashutosh
+        build: <+input>
+  stages:
+    - stage:
+        name: CI stage
+        identifier: CI_stage
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_1
+                  identifier: BuildAndPushDockerRegistry_1
+                  spec:
+                    connectorRef: docker_hub
+                    repo: ashutosham2002/nodejsapp
+                    tags:
+                      - latest
+                    caching: true
+                    dockerfile: ./Dockerfile

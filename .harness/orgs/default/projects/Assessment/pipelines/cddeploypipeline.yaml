@@ -27,12 +27,7 @@ pipeline:
             environmentRef: Dev
             deployToAll: false
             infrastructureDefinitions:
-              - identifier: gcpinfra
-                inputs:
-                  identifier: gcpinfra
-                  type: KubernetesGcp
-                  spec:
-                    provisioner: <+input>
+              - identifier: devk8s
           execution:
             steps:
               - stepGroup:
@@ -40,21 +35,17 @@ pipeline:
                   identifier: canaryDeployment
                   steps:
                     - step:
-                        name: Canary Deployment
-                        identifier: canaryDeployment
-                        type: K8sCanaryDeploy
+                        name: Rollout Deployment
+                        identifier: rolloutDeployment_canary
+                        type: K8sRollingDeploy
                         timeout: 10m
                         spec:
-                          instanceSelection:
-                            type: Count
-                            spec:
-                              count: 1
                           skipDryRun: false
                   rollbackSteps:
                     - step:
-                        name: Canary Rollback
-                        identifier: canaryRollback
-                        type: K8sCanaryDelete
+                        name: Rollback Deployment
+                        identifier: rollbackDeployment_canary
+                        type: K8sRollingRollback
                         timeout: 10m
                         spec: {}
               - stepGroup:
@@ -62,32 +53,26 @@ pipeline:
                   identifier: primaryDeployment
                   steps:
                     - step:
-                        name: Rolling Deployment
-                        identifier: rollingDeployment
+                        name: Rollout Deployment
+                        identifier: rolloutDeployment_primary
                         type: K8sRollingDeploy
                         timeout: 10m
                         spec:
                           skipDryRun: false
                     - step:
-                        name: Canary Delete
-                        identifier: canaryDelete
+                        name: Finalize Deployment
+                        identifier: finalizeDeployment
                         type: K8sCanaryDelete
                         timeout: 10m
                         spec: {}
                   rollbackSteps:
                     - step:
-                        name: Rolling Rollback
-                        identifier: rollingRollback
+                        name: Rollback Deployment
+                        identifier: rollbackDeployment_primary
                         type: K8sRollingRollback
                         timeout: 10m
                         spec: {}
             rollbackSteps:
-              - step:
-                  name: Canary Delete
-                  identifier: rollbackCanaryDelete
-                  type: K8sCanaryDelete
-                  timeout: 10m
-                  spec: {}
               - step:
                   name: Rolling Rollback
                   identifier: rollingRollback
